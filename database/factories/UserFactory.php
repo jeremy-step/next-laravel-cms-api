@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -23,12 +25,20 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $gender = fake()->randomElement(['male', 'female']);
+        $phone = fake()->optional()->phoneNumber();
+
         return [
-            'name' => fake()->name(),
+            'username' => fake()->unique()->userName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'name_first' => fake()->optional()->firstName($gender),
+            'name_second' => fake()->optional()->firstName($gender),
+            'name_last' => fake()->optional()->lastName($gender),
+            'phone' => $phone ? trim(str_replace('+34', '', $phone)) : null,
+            'phone_prefix' => $phone ? (str_contains($phone, '+34') ? '+34' : null) : null,
         ];
     }
 
