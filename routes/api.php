@@ -5,8 +5,16 @@ declare(strict_types=1);
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::name('api.')->group(function (): void {
+    Route::middleware('auth:sanctum')->group(function (): void {
 
-Route::get('/test', fn () => response()->json("test"));
+        Route::get('/user', function (Request $request): array {
+            
+            return ['data' => $request->user()];
+            
+        })->name('user');
+        
+        Route::get('/test', fn () => response()->json('test'))->name('test');
+
+    });
+});
