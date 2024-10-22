@@ -5,8 +5,6 @@ declare(strict_types=1);
 use App\Http\Middleware\FrontRoutesMiddleware;
 use Illuminate\Support\Facades\Route;
 
-require_once __DIR__.'/fortify.php';
-
 Route::name('front.')
     ->middleware(FrontRoutesMiddleware::class)
     ->group(function (): void {
