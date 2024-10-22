@@ -9,6 +9,7 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -32,6 +33,10 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        ResetPassword::createUrlUsing(function (User $user, string $token) {
+            return 'https://example.com/reset-password?token='.$token;
+        });
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
@@ -43,10 +48,14 @@ class FortifyServiceProvider extends ServiceProvider
                 $request->login,
             )->first();
 
+            $request->mergeIfMissing(['email' => $user?->email]);
+
             if ($user &&
                 Hash::check($request->password, $user->password)) {
                 return $user;
             }
+
+            return null;
         });
 
         RateLimiter::for('login', function (Request $request) {
