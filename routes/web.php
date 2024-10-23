@@ -13,6 +13,7 @@ Route::name('front.')
 
         Route::name('cp.')
             ->prefix('/control-panel')
+            ->middleware('front:auth')
             ->group(function (): void {
 
                 Route::get('/dashboard')->name('dashboard.index');
@@ -21,9 +22,9 @@ Route::name('front.')
                     ->prefix('/pages')
                     ->group(function (): void {
 
-                        Route::get('/pages')->name('index');
-                        Route::get('/pages/create')->name('create');
-                        Route::get('/pages/{pageId}')->whereUuid('pageId')->name('edit');
+                        Route::get('/')->name('index');
+                        Route::get('/create')->name('create');
+                        Route::get('/{pageId}')->whereUuid('pageId')->name('edit');
 
                     });
 
@@ -31,17 +32,27 @@ Route::name('front.')
 
             });
 
-        Route::get('/login')->name('login');
-        Route::get('/register')->name('register');
+        Route::middleware('front:guest')->group(function (): void {
 
-        Route::get('/{permalink?}')->where(['permalink' => '.+'])->name('page.permalink');
+            Route::get('/login')->name('login');
+            Route::get('/register')->name('register');
+
+        });    
 
     });
 
 Route::middleware(FrontRoutesMiddleware::class)->group(function (): void {
 
-    Route::get('/email/verify')->name('verification.notice');
+    Route::middleware('front:auth')->group(function (): void {
 
+        Route::get('/email/verify')->name('verification.notice');
+        
+    });
+
+    Route::get('/{permalink?}')
+        ->where(['permalink' => '.+', '_permalink' => true])
+        ->name('front.page.permalink');
+    
 });
 
 Route::fallback(fn () => abort(400));
