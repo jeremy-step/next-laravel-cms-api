@@ -16,9 +16,9 @@ Artisan::command('ziggy:generate:api', function (): void {
         "ziggy:generate ../next-laravel-cms-front/src/lib/router/router-api.js --group api --url '{$url}'"
     );
 
-    Artisan::call(
-        "ziggy:generate ../next-laravel-cms-front/src/lib/router/router-api-route-list.ts --types-only --group api --url '{$url}'"
-    );
+    // Artisan::call(
+    //     "ziggy:generate ../next-laravel-cms-front/src/lib/router/router-api-route-list.ts --types-only --group api --url '{$url}'"
+    // );
 
     $this->info('API Files generated!');
 });
@@ -30,9 +30,9 @@ Artisan::command('ziggy:generate:front', function (): void {
         "ziggy:generate ../next-laravel-cms-front/src/lib/router/router-front.js --group front --url '{$url}'"
     );
 
-    Artisan::call(
-        "ziggy:generate ../next-laravel-cms-front/src/lib/router/router-front-route-list.ts --types-only --group front --url '{$url}'"
-    );
+    // Artisan::call(
+    //     "ziggy:generate ../next-laravel-cms-front/src/lib/router/router-front-route-list.ts --types-only --group front --url '{$url}'"
+    // );
 
     $this->info('Front Files generated!');
 });
