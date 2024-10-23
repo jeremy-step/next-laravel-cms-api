@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Console\ZiggyTypes;
+use App\Console\ZiggyRoutes;
 
 return [
     'groups' => [
@@ -16,6 +16,6 @@ return [
     ],
 
     'output' => [
-        'types' => ZiggyTypes::class,
+        'file' => ZiggyRoutes::class,
     ],
 ];
