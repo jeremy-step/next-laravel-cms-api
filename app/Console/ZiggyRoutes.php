@@ -19,41 +19,44 @@ class ZiggyRoutes implements Stringable
         $routes = Route::getRoutes()->getRoutesByName();
         $ziggy = collect($this->ziggy->toArray());
         $ziggyRoutes = collect($ziggy['routes'] ?? []);
-        
+
         $ziggy['routes'] = $ziggyRoutes->map(function ($route, $name) use ($routes): array {
             $middleware = array_filter(
                 $routes[$name]->middleware(),
                 fn ($middleware) => str_starts_with($middleware, 'front')
             );
-            
-            if (!empty($middleware)) {
+
+            if (! empty($middleware)) {
                 $route['middleware'] = array_values($middleware);
             }
 
-            $route['pattern'] = '/' . ltrim(
+            $route['pattern'] = '/'.ltrim(
                 preg_replace_callback(
                     "/{(([^{}]+?)\?|([^{}]+))}/",
 
                     function ($matches) use (&$route): string {
-                        $regex = "";
+                        $regex = '';
 
                         if (isset($route['wheres']) && isset($matches[2])) {
-                            $includeRegex = $route['wheres']['_' . ($matches[3] ?? $matches[2])] ?? false;
-                            
+                            $includeRegex = $route['wheres']['_'.($matches[3] ?? $matches[2])] ?? false;
+
                             if ($includeRegex) {
                                 $regex = $route['wheres'][$matches[3] ?? $matches[2]] ?? null;
-                                $regex = $regex ? "($regex)" : "";
+                                $regex = $regex ? "($regex)" : '';
 
-                                unset($route['wheres']['_' . ($matches[3] ?? $matches[2])]);
+                                unset($route['wheres']['_'.($matches[3] ?? $matches[2])]);
                             }
                         }
 
                         return ":{$matches[1]}$regex";
                     },
-                    
+
                     $route['uri']
-                )
-            , '/');
+                ),
+                '/'
+            );
+
+            $route['parameters'] ??= [];
 
             return $route;
         });

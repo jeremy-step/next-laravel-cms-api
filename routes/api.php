@@ -9,11 +9,11 @@ Route::name('api.')->group(function (): void {
     Route::middleware('auth:sanctum')->group(function (): void {
 
         Route::get('/user', function (Request $request): array {
-            
+
             return ['data' => $request->user()];
-            
+
         })->name('user');
-        
+
         Route::get('/test', fn () => response()->json('test'))->name('test');
 
     });

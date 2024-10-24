@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'front' => FrontPlaceholderMiddleware::class,
             'front:guest' => FrontPlaceholderMiddleware::class,
-            'front:auth' => FrontPlaceholderMiddleware::class
+            'front:auth' => FrontPlaceholderMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

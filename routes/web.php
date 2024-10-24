@@ -37,7 +37,7 @@ Route::name('front.')
             Route::get('/login')->name('login');
             Route::get('/register')->name('register');
 
-        });    
+        });
 
     });
 
@@ -46,13 +46,13 @@ Route::middleware(FrontRoutesMiddleware::class)->group(function (): void {
     Route::middleware('front:auth')->group(function (): void {
 
         Route::get('/email/verify')->name('verification.notice');
-        
+
     });
 
     Route::get('/{permalink?}')
         ->where(['permalink' => '.+', '_permalink' => true])
         ->name('front.page.permalink');
-    
+
 });
 
 Route::fallback(fn () => abort(400));
