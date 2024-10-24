@@ -54,7 +54,7 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "pnpx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"pnpm ziggy:watch\" \"cd ../next-laravel-cms-front && pnpm dev\" --names=server,queue,ziggy,front"
+            "pnpx concurrently -c \"#93c5fd,#c4b5fd,#fb7185\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"pnpm ziggy:watch\" --names=server,queue,ziggy"
         ]
     },
     "extra": {
