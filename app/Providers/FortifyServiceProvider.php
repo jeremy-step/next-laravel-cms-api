@@ -9,11 +9,14 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
@@ -33,6 +36,21 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        VerifyEmail::createUrlUsing(function ($notifiable): string {
+            return URL::format(
+                config('ziggy.url.front', 'http://localhost:3000'),
+                URL::temporarySignedRoute(
+                    'front.verification.verify',
+                    Carbon::now()->addMinutes(config('auth.verification.expire', 60)),
+                    [
+                        'id' => $notifiable->getKey(),
+                        'hash' => sha1($notifiable->getEmailForVerification()),
+                    ],
+                    false
+                )
+            );
+        });
+
         ResetPassword::createUrlUsing(function (User $user, string $token) {
             return 'https://example.com/reset-password?token='.$token;
         });
