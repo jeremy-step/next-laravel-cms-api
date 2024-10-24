@@ -32,6 +32,13 @@ Route::name('front.')
 
             });
 
+        Route::middleware('front:auth')->group(function (): void {
+
+            Route::get('/email/verify')->name('verification.notice');
+            Route::get('/email/verify/{id}/{hash}')->name('verification.verify');
+
+        });
+
         Route::middleware('front:guest')->group(function (): void {
 
             Route::get('/login')->name('login');
@@ -42,12 +49,6 @@ Route::name('front.')
     });
 
 Route::middleware(FrontRoutesMiddleware::class)->group(function (): void {
-
-    Route::middleware('front:auth')->group(function (): void {
-
-        Route::get('/email/verify')->name('verification.notice');
-
-    });
 
     Route::get('/{permalink?}')
         ->where(['permalink' => '.+', '_permalink' => true])
