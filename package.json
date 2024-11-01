@@ -2,8 +2,6 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite",
-        "build": "vite build",
         "ziggy:watch": "nodemon -e php --watch ./routes --watch .env -x \"pnpm ziggy:generate:all\"  --ignore ./routes/console.php",
         "ziggy:generate:all": "php artisan ziggy:generate:all"
     },
