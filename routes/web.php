@@ -49,7 +49,7 @@ Route::name('front.')
 Route::middleware(FrontRoutesMiddleware::class)->group(function (): void {
 
     Route::get('/{permalink?}')
-        ->where(['permalink' => '.+', '_permalink' => true])
+        ->where(['permalink' => '.+', 'include-pattern:permalink' => true])
         ->name('front.page.permalink');
 
 });

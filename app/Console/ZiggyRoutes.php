@@ -38,13 +38,13 @@ class ZiggyRoutes implements Stringable
                         $regex = '';
 
                         if (isset($route['wheres']) && isset($matches[2])) {
-                            $includeRegex = $route['wheres']['_'.($matches[3] ?? $matches[2])] ?? false;
+                            $includeRegex = $route['wheres']['include-pattern:'.($matches[3] ?? $matches[2])] ?? false;
 
                             if ($includeRegex) {
                                 $regex = $route['wheres'][$matches[3] ?? $matches[2]] ?? null;
                                 $regex = $regex ? "($regex)" : '';
 
-                                unset($route['wheres']['_'.($matches[3] ?? $matches[2])]);
+                                unset($route['wheres']['include-pattern:'.($matches[3] ?? $matches[2])]);
                             }
                         }
 
