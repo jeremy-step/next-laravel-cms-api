@@ -9,8 +9,6 @@ Route::name('front.')
     ->middleware(FrontRoutesMiddleware::class)
     ->group(function (): void {
 
-        Route::post('/api/set-cookies')->name('set.cookies');
-
         Route::name('cp.')
             ->prefix('/control-panel')
             ->middleware('front:auth')
