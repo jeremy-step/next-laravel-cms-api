@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('name_first')->nullable();
             $table->string('name_second')->nullable();
             $table->string('name_last')->nullable();
-            $table->string('name_display')->default('<username>');
+            $table->string('name_display')->default('<username>')->nullable();
             $table->string('phone', 32)->nullable();
             $table->string('phone_prefix', 8)->nullable();
             $table->string('locale', 5)->default(config('app.locale'));
