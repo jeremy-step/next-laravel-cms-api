@@ -6,6 +6,6 @@
         "ziggy:generate:all": "php artisan ziggy:generate:all"
     },
     "devDependencies": {
-        "concurrently": "^9.0.1"
+        "concurrently": "^9.1.0"
     }
 }
