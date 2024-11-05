@@ -21,5 +21,6 @@ class Page extends Model
     protected $fillable = [
         'title',
         'text',
+        'permalink',
     ];
 }

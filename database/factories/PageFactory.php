@@ -18,9 +18,12 @@ class PageFactory extends Factory
      */
     public function definition(): array
     {
+        $title = fake()->unique()->words(10, true);
+
         return [
-            'title' => fake()->unique()->text(20),
-            'text' => fake()->unique()->text(),
+            'permalink' => str($title)->slug(),
+            'title' => str($title)->title(),
+            'text' => fake()->unique()->text(750),
         ];
     }
 }
