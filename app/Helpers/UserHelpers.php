@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Helpers;
 
-final class UserHelper
+final class UserHelpers
 {
     public static function formatNameDisplay(array &$user): void
     {
