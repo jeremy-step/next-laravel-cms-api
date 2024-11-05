@@ -16,6 +16,7 @@ namespace App\Models{
  * 
  *
  * @property string $id
+ * @property string $permalink
  * @property string $title
  * @property string $text
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -26,6 +27,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Page query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Page whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Page whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Page wherePermalink($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Page whereText($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Page whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Page whereUpdatedAt($value)
