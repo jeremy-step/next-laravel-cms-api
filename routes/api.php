@@ -39,9 +39,11 @@ Route::name('api.')->group(function (): void {
 
     Route::name('pages.')->controller(PageController::class)->group(function (): void {
 
+        Route::get('/pages/permalink', 'getByPermalink')->name('permalink');
+
         Route::get('/pages', 'index')->name('index');
 
-        Route::get('/pages/{id}', 'get')->whereUuid('page')->name('get');
+        Route::get('/pages/{id}', 'get')->whereUuid('id')->name('get');
 
     });
 
