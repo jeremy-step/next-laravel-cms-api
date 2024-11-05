@@ -14,17 +14,17 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class PageController extends Controller
 {
+    protected $fields = ['id', 'permalink', 'title', 'text', 'created_at', 'updated_at'];
+
     /**
-     * Display a listing of the resource.
+     * Display a pages listing.
      */
     public function index(Request $request): PageCollection
     {
-        $fields = ['id', 'title', 'text', 'created_at', 'updated_at'];
-
         $pages = QueryBuilder::for(Page::class)
-            ->allowedFilters($fields)
-            ->allowedFields($fields)
-            ->allowedSorts($fields);
+            ->allowedFilters($this->fields)
+            ->allowedFields($this->fields)
+            ->allowedSorts($this->fields);
 
         $pages = $request->has('all') ? $pages->get() : $pages->jsonPaginate()->appends(request()->query());
 
@@ -32,31 +32,42 @@ class PageController extends Controller
     }
 
     /**
-     * Get the specified resource.
+     * Get the specified page.
      */
     public function get(string $id): PageResource
     {
-        $fields = ['id', 'title', 'text', 'created_at', 'updated_at'];
-
         $page = QueryBuilder::for(Page::class)
-            ->allowedFields($fields);
+            ->allowedFields($this->fields);
 
         return new PageResource($page->findOrNotFound($id));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Get the specified page by permalink.
+     */
+    public function getByPermalink(Request $request): PageResource
+    {
+        $page = Page::wherePermalink($request->get('permalink') ?? '')->first();
+
+        return $page ? new PageResource($page) : abort(404, 'Page not found');
+    }
+
+    /**
+     * Store a newly created page in storage.
      */
     public function store(StorePageRequest $request): PageResource
     {
         $data = $request->all(['title', 'text']);
+
+        $data['permalink'] = str($data['title'])->slug();
+
         $page = Page::create($data);
 
         return new PageResource(['id' => $page->id]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified page in storage.
      */
     public function update(UpdatePageRequest $request, Page $page): array
     {
@@ -69,7 +80,7 @@ class PageController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified page from storage.
      */
     public function destroy(Page $page): array
     {
