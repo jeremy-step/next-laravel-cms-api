@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pages', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('permalink')->unique();
-            $table->string('title');
-            $table->text('text');
-            $table->timestamps();
+        Schema::create('settings', function (Blueprint $table) {
+            $table->string('key')->primary();
+            $table->text('value')->nullable();
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('settings');
     }
 };
