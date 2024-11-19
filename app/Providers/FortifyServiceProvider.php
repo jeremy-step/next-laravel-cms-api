@@ -70,6 +70,7 @@ class FortifyServiceProvider extends ServiceProvider
 
             if ($user &&
                 Hash::check($request->password, $user->password)) {
+
                 return $user;
             }
 
