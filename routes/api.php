@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\PageController;
-use App\Http\Resources\UserResource;
-use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('api.')->group(function (): void {
@@ -13,25 +12,42 @@ Route::name('api.')->group(function (): void {
 
         // --- AUTH ---
 
-        Route::get('/user', function (Request $request): UserResource {
+        Route::name('users.')
+            ->prefix('/users')
+            ->controller(UserController::class)
+            ->group(function (): void {
 
-            return new UserResource($request->user());
+                Route::name('sessions.')->prefix('/sessions')->group(function (): void {
 
-        })->name('user');
+                    Route::get('/', 'getSessions')->name('index');
+                    Route::get('/{user}', 'getUserSessions')->name('get');
 
-        Route::get('/authenticated', fn () => null)->name('authenticated');
+                });
+
+                Route::post('/', 'store')->name('store');
+                Route::patch('/{user}', 'update')->name('update');
+                Route::delete('/{user}', 'destroy')->name('destroy');
+                Route::get('/authenticated', 'getAuthenticated')->name('authenticated');
+                Route::get('/is-authenticated', 'isAuthenticated')->name('is-authenticated');
+                Route::get('/', 'index')->name('index');
+                Route::get('/{user}', 'get')->name('get');
+
+            });
 
         // --- PAGES ---
 
-        Route::name('pages.')->controller(PageController::class)->group(function (): void {
+        Route::name('pages.')
+            ->prefix('/pages')
+            ->controller(PageController::class)
+            ->group(function (): void {
 
-            Route::post('/pages', 'store')->name('store');
+                Route::post('/', 'store')->name('store');
+                Route::patch('/{page}', 'update')->name('update');
+                Route::delete('/{page}', 'destroy')->name('destroy');
+                Route::get('/', 'index')->name('index');
+                Route::get('/{id}', 'get')->name('get');
 
-            Route::patch('/pages/{page}', 'update')->name('update');
-
-            Route::delete('/pages/{page}', 'destroy')->name('destroy');
-
-        });
+            });
 
     });
 
@@ -39,11 +55,7 @@ Route::name('api.')->group(function (): void {
 
     Route::name('pages.')->controller(PageController::class)->group(function (): void {
 
-        Route::get('/pages/permalink', 'getByPermalink')->name('permalink');
-
-        Route::get('/pages', 'index')->name('index');
-
-        Route::get('/pages/{id}', 'get')->whereUuid('id')->name('get');
+        Route::get('/page/{page:permalink?}', 'getByPermalink')->name('permalink');
 
     });
 

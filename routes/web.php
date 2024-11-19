@@ -26,6 +26,16 @@ Route::name('front.')
 
                     });
 
+                Route::name('users.')
+                    ->prefix('/users')
+                    ->group(function (): void {
+
+                        Route::get('/')->name('index');
+                        Route::get('/create')->name('create');
+                        Route::get('/{userId}')->whereUuid('userId')->name('profile');
+
+                    });
+
                 Route::get('/settings')->name('settings.index');
 
             });
