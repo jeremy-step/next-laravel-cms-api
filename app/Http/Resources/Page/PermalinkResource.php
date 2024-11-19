@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Page;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class PageResource extends JsonResource
+class PermalinkResource extends PageResource
 {
     /**
      * Transform the resource into an array.
@@ -16,6 +15,10 @@ class PageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $page = parent::toArray($request);
+
+        unset($page['id'], $page['user']);
+
+        return $page;
     }
 }

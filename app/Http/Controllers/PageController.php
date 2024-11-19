@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Settings;
 use App\Http\Requests\StorePageRequest;
 use App\Http\Requests\UpdatePageRequest;
-use App\Http\Resources\PageCollection;
-use App\Http\Resources\PageResource;
+use App\Http\Resources\Page\PageCollection;
+use App\Http\Resources\Page\PageResource;
+use App\Http\Resources\Page\PermalinkResource;
 use App\Models\Page;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -22,9 +24,11 @@ class PageController extends Controller
     public function index(Request $request): PageCollection
     {
         $pages = QueryBuilder::for(Page::class)
-            ->allowedFilters($this->fields)
             ->allowedFields($this->fields)
-            ->allowedSorts($this->fields);
+            ->allowedFilters($this->fields)
+            ->allowedSorts($this->fields)
+            ->allowedIncludes(['user'])
+            ->defaultSort(['-created_at']);
 
         $pages = $request->has('all') ? $pages->get() : $pages->jsonPaginate()->appends(request()->query());
 
@@ -37,7 +41,8 @@ class PageController extends Controller
     public function get(string $id): PageResource
     {
         $page = QueryBuilder::for(Page::class)
-            ->allowedFields($this->fields);
+            ->allowedFields($this->fields)
+            ->allowedIncludes(['user']);
 
         return new PageResource($page->findOrNotFound($id));
     }
@@ -45,11 +50,19 @@ class PageController extends Controller
     /**
      * Get the specified page by permalink.
      */
-    public function getByPermalink(Request $request): PageResource
+    public function getByPermalink(Page $page): array|PermalinkResource
     {
-        $page = Page::wherePermalink($request->get('permalink') ?? '')->first();
+        $frontpage = Settings::get('frontpage');
 
-        return $page ? new PageResource($page) : abort(404, 'Page not found');
+        if ($page->exists && $page->id === $frontpage) {
+            return ['redirect' => ['route' => 'front.page.permalink']];
+        }
+
+        if (! $page->exists) {
+            $page = Page::findOrFail($frontpage);
+        }
+
+        return new PermalinkResource($page);
     }
 
     /**
@@ -61,9 +74,9 @@ class PageController extends Controller
 
         $data['permalink'] = str($data['title'])->slug();
 
-        $page = Page::create($data);
+        $page = $request->user()?->pages()->create($data);
 
-        return new PageResource(['id' => $page->id]);
+        return new PageResource($page);
     }
 
     /**
