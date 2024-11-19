@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -48,5 +49,21 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the sessions belonging to the user.
+     */
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(Session::class);
+    }
+
+    /**
+     * Get the pages belonging to the user.
+     */
+    public function pages(): HasMany
+    {
+        return $this->hasMany(Page::class);
     }
 }
