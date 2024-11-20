@@ -12,4 +12,4 @@ To serve (development) the application:
     -   Run `composer run dev`
 -   Default hosts for frontend and api are `localhost:3000` and `localhost:8000` respectively
 
-To install the Frontend CMS repository, see the reame: https://github.com/cima-alfa/next-laravel-cms-front/blob/main/README.md
+To install the Frontend CMS repository, see the readme: https://github.com/cima-alfa/next-laravel-cms-front/blob/main/README.md
