@@ -20,6 +20,13 @@ class Setting extends Model
     protected $primaryKey = 'key';
 
     /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool

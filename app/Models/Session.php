@@ -10,20 +10,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Session extends Model
 {
     /**
-     * Indicates if the model should be timestamped.
+     * The "type" of the primary key ID.
      *
-     * @var bool
+     * @var string
      */
-    public $timestamps = false;
+    protected $keyType = 'string';
 
     /**
-     * The attributes that are mass assignable.
+     * The name of the "updated at" column.
      *
-     * @var array<int, string>
+     * @var string|null
      */
-    protected $fillable = [
-        'created_at',
-    ];
+    const UPDATED_AT = null;
 
     /**
      * The attributes that should be hidden for serialization.
