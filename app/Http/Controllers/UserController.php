@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserInviteRequest;
 use App\Http\Resources\User\SessionCollection;
 use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
+use App\Mail\UserInvite as MailUserInvite;
 use App\Models\Session;
 use App\Models\User;
+use App\Models\UserInvite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
@@ -30,6 +35,29 @@ class UserController extends Controller
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * Invite a new user to register.
+     */
+    public function invite(UserInviteRequest $request): null
+    {
+        $email = $request->validated('email');
+
+        $key = config('app.key');
+
+        if (str_starts_with($key, 'base64:')) {
+            $key = base64_decode(substr($key, 7));
+        }
+
+        UserInvite::updateOrCreate(
+            ['email' => Str::lower($email)],
+            [UserInvite::CREATED_AT => Carbon::now()]
+        );
+
+        Mail::to($email)->send(new MailUserInvite);
+
+        return null;
+    }
 
     /**
      * Display a users listing.
