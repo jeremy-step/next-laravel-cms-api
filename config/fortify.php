@@ -2,9 +2,15 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Carbon;
 use Laravel\Fortify\Features;
 
 return [
+
+    'invite' => [
+        /** Invite lifetime in minutes */
+        'lifetime' => Carbon::MINUTES_PER_HOUR * Carbon::HOURS_PER_DAY,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -148,7 +154,7 @@ return [
     'features' => [
         Features::registration(),
         Features::resetPasswords(),
-        Features::emailVerification(),
+        // Features::emailVerification(),
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         // Features::twoFactorAuthentication([
