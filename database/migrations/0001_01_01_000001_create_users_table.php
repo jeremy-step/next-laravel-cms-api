@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Laravel\Fortify\Fortify;
 
 return new class extends Migration
 {
@@ -13,12 +14,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('user_invites', function (Blueprint $table) {
+            $table->string('email')->primary();
+            $table->timestamp('invited_at');
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('username', 32)->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->text('two_factor_secret')->nullable();
+            $table->text('two_factor_recovery_codes')->nullable();
             $table->rememberToken();
             $table->string('name_first')->nullable();
             $table->string('name_second')->nullable();
@@ -28,6 +36,12 @@ return new class extends Migration
             $table->string('phone_prefix', 8)->nullable();
             $table->string('locale', 5)->default(config('app.locale'));
             $table->timestamps();
+
+            if (Fortify::confirmsTwoFactorAuthentication()) {
+                $table->timestamp('two_factor_confirmed_at')
+                    ->after('two_factor_recovery_codes')
+                    ->nullable();
+            }
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -58,6 +72,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('user_invites');
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
