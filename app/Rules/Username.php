@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Fortify;
+namespace App\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -10,7 +10,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use Illuminate\Support\Facades\Validator as Rule;
 
-class UsernameValidation implements ValidationRule, ValidatorAwareRule
+class Username implements ValidationRule, ValidatorAwareRule
 {
     /**
      * The validator performing the validation.
@@ -41,8 +41,8 @@ class UsernameValidation implements ValidationRule, ValidatorAwareRule
                 [
                     'username.invalid_characters' => ':attribute must only contain letters, numbers and dots or dashes or underscores.',
                     'username.invalid_start_end' => ':attribute must start and end with a letter or number.',
-                    'username.mixed_special_characters' => 'Mixed special characters are not allowed for the :attribute.',
-                    'username.multiple_consecutive_special_characters' => 'Multiple consecutive special characters are not allowed for the :attribute.',
+                    'username.mixed_special_characters' => ':attribute must not contain mixed special characters.',
+                    'username.multiple_consecutive_special_characters' => ':attribute must not contain multiple consecutive special characters.',
                 ],
                 $this->validator->customMessages
             ),
