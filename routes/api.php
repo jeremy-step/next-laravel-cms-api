@@ -24,7 +24,7 @@ Route::name('api.')->group(function (): void {
 
                 });
 
-                Route::post('/', 'store')->name('store');
+                Route::post('/invite', 'invite')->name('invite');
                 Route::patch('/{user}', 'update')->name('update');
                 Route::delete('/{user}', 'destroy')->name('destroy');
                 Route::get('/authenticated', 'getAuthenticated')->name('authenticated');
