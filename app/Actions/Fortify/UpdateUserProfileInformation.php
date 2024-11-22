@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Actions\Fortify;
 
+use App\Events\User\EmailUpdated;
+use App\Events\User\UsernameUpdated;
 use App\Models\User;
+use App\Rules\Username;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -19,9 +22,23 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update(User $user, array $input): void
     {
+        $messages = [
+            'required' => __('updateProfileInformation.validation.required'),
+            'required_if' => __('updateProfileInformation.validation.required_if'),
+            'required_with' => __('updateProfileInformation.validation.required_with'),
+            'min' => __('updateProfileInformation.validation.min'),
+            'max' => __('updateProfileInformation.validation.max'),
+            'max_digits' => __('updateProfileInformation.validation.max_digits'),
+            'email' => __('updateProfileInformation.validation.email'),
+            'not_regex' => __('updateProfileInformation.validation.not_regex'),
+            'numeric' => __('updateProfileInformation.validation.numeric'),
+            'string' => __('updateProfileInformation.validation.string'),
+            'unique' => __('updateProfileInformation.validation.unique'),
+        ];
+
         Validator::make($input, [
-            'update_user' => ['required', 'in:profile,username,email'],
-            'username' => ['required_if:update_user,username', 'string', 'min:4', 'max:32', new UsernameValidation, Rule::unique(User::class)->ignore($user->id)],
+            'update_user' => ['required', 'string', 'in:profile,username,email'],
+            'username' => ['required_if:update_user,username', 'string', 'min:4', 'max:32', new Username, Rule::unique(User::class)->ignore($user->id)],
             'email' => [
                 'required_if:update_user,email',
                 'string',
@@ -33,9 +50,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'name_second' => ['nullable', 'string', 'max:255'],
             'name_last' => ['required_if:update_user,profile', 'string', 'max:255'],
             'name_display' => ['required_if:update_user,profile', 'string', 'max:255'],
-            'phone' => ['nullable', 'required_with:phone_prefix', 'string', 'max:32', 'not_regex:/[^0-9 )(-.]+/'],
+            'phone' => ['nullable', 'required_with:phone_prefix', 'string', 'max:32', 'not_regex:/[^\d\s.,\-]+/'],
             'phone_prefix' => ['nullable', 'required_with:phone', 'numeric', 'max_digits:8'],
-        ])->validateWithBag('updateProfileInformation');
+        ], $messages)->validateWithBag('updateProfileInformation');
 
         $data = [];
 
@@ -64,9 +81,21 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 break;
         }
 
-        if (isset($data['email']) && $data['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
+        if (isset($data['username']) && $data['username'] !== $user->username) {
+            $oldUsername = $user->username;
+
+            $user->forceFill($data)->save();
+
+            event(new UsernameUpdated($user, $oldUsername));
+        } elseif (
+            isset($data['email']) && $data['email'] !== $user->email &&
+            $user instanceof MustVerifyEmail
+        ) {
+            $oldEmail = $user->email;
+
             $this->updateVerifiedUser($user, $data);
+
+            event(new EmailUpdated($user, $oldEmail));
         } else {
             $user->forceFill($data)->save();
         }
