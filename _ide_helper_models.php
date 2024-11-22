@@ -15,6 +15,23 @@ namespace App\Models{
 /**
  * 
  *
+ * @property string $email
+ * @property string $token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereToken($value)
+ */
+	class Invite extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
  * @property string $id
  * @property string $permalink
  * @property string $title
@@ -42,16 +59,18 @@ namespace App\Models{
 /**
  * 
  *
- * @property int $id
+ * @property string $id
  * @property string|null $ip_address
  * @property string|null $user_agent
  * @property string $payload
+ * @property \Illuminate\Support\Carbon $created_at
  * @property int $last_activity
  * @property string|null $user_id
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Session newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Session newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Session query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Session whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Session whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Session whereIpAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Session whereLastActivity($value)
@@ -93,7 +112,7 @@ namespace App\Models{
  * @property string|null $name_first
  * @property string|null $name_second
  * @property string|null $name_last
- * @property string|null $name_display
+ * @property string $name_display
  * @property string|null $phone
  * @property string|null $phone_prefix
  * @property string $locale
@@ -129,6 +148,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
  */
-	class User extends \Eloquent implements \Illuminate\Contracts\Auth\MustVerifyEmail {}
+	class User extends \Eloquent {}
 }
 
