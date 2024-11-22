@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Middleware\FrontRoutesMiddleware;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Features;
 
 Route::name('front.')
     ->middleware(FrontRoutesMiddleware::class)
@@ -42,8 +43,10 @@ Route::name('front.')
 
         Route::middleware('front:auth')->group(function (): void {
 
-            Route::get('/email/verify')->name('verification.notice');
-            Route::get('/email/verify/{id}/{hash}')->name('verification.verify');
+            if (Features::enabled(Features::emailVerification())) {
+                Route::get('/email/verify')->name('verification.notice');
+                Route::get('/email/verify/{id}/{hash}')->name('verification.verify');
+            }
 
         });
 
