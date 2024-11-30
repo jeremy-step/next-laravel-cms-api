@@ -10,6 +10,7 @@ use App\Rules\Username;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -19,7 +20,21 @@ class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
-    public function __construct(protected Request $request) {}
+    public function __construct(protected Request $request)
+    {
+        /** @var \Illuminate\Cache\RateLimiting\Limit */
+        $limiter = RateLimiter::limiter('register')($this->request);
+
+        RateLimiter::hit($limiter->key, $limiter->decaySeconds);
+
+        if (RateLimiter::tooManyAttempts($limiter->key, $limiter->maxAttempts + 1)) {
+            abort(429, 'Too many requests.');
+        }
+
+        if (! $this->request->hasValidSignature()) {
+            abort(401, 'You must be invited to register.');
+        }
+    }
 
     /**
      * Validate and create a newly registered user.
@@ -28,10 +43,6 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        if (! $this->request->hasValidSignature()) {
-            abort(401, 'You must be invited to register.');
-        }
-
         Validator::make($input, [
             'username' => ['required', 'string', 'min:4', 'max:32', new Username, Rule::unique(User::class)],
             'email' => [
