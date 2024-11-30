@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class RoutesTest extends TestCase
 {
-    public function test_front_and_any_non_specific_route_return_bad_request_response(): void
+    public function test_any_non_specific_route_return_bad_request_response(): void
     {
         $response = $this->get('/');
 
