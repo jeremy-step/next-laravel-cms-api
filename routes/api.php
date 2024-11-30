@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,10 +43,26 @@ Route::name('api.')->group(function (): void {
             ->group(function (): void {
 
                 Route::post('/', 'store')->name('store');
+                Route::patch('/{page}/metadata', 'updateMetadata')->name('updateMetadata');
                 Route::patch('/{page}', 'update')->name('update');
                 Route::delete('/{page}', 'destroy')->name('destroy');
                 Route::get('/', 'index')->name('index');
                 Route::get('/{id}', 'get')->name('get');
+
+            });
+
+        // --- SETTINGS ---
+
+        Route::name('settings.')
+            ->prefix('/settings')
+            ->controller(SettingController::class)
+            ->group(function (): void {
+
+                Route::patch('/{type}', 'update')
+                    ->whereIn('type', ['general', 'emails'])
+                    ->name('update');
+
+                Route::get('/', 'index')->name('index');
 
             });
 
@@ -55,7 +72,12 @@ Route::name('api.')->group(function (): void {
 
     Route::name('pages.')->controller(PageController::class)->group(function (): void {
 
-        Route::get('/page/{page:permalink?}', 'getByPermalink')->name('permalink');
+        Route::get('/page/{page:permalink?}', 'getByPermalink')
+            ->where(['page' => '.+'])
+            ->name('permalink');
+
+        Route::get('/sitemap', 'sitemap')
+            ->name('sitemap');
 
     });
 
