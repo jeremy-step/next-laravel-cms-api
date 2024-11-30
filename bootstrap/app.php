@@ -33,6 +33,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'front' => FrontPlaceholderMiddleware::class,
             'front:guest' => FrontPlaceholderMiddleware::class,
             'front:auth' => FrontPlaceholderMiddleware::class,
+            'front:owner' => FrontPlaceholderMiddleware::class,
+            'front:permalink:frontpage' => FrontPlaceholderMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
