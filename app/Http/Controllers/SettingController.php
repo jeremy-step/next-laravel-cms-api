@@ -1,66 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Models\Setting;
-use App\Http\Requests\StoreSettingRequest;
+use App\Helpers\Settings;
 use App\Http\Requests\UpdateSettingRequest;
+use App\Http\Resources\Setting\SettingCollection;
+use App\Models\Setting;
+use Illuminate\Support\Facades\Gate;
 
 class SettingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): SettingCollection
     {
-        //
-    }
+        Gate::authorize('viewAny', Setting::class);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreSettingRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Setting $setting)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Setting $setting)
-    {
-        //
+        return new SettingCollection(Settings::get());
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSettingRequest $request, Setting $setting)
+    public function update(UpdateSettingRequest $request)
     {
-        //
-    }
+        $settings = $request->input('settings');
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Setting $setting)
-    {
-        //
+        return Settings::set($settings) ? ['message' => 'Changes saved successfully'] : ['message' => 'Changes could not be saved'];
     }
 }
