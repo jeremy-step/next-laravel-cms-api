@@ -6,6 +6,8 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UserInviteRequest extends FormRequest
@@ -15,7 +17,7 @@ class UserInviteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::check('invite', User::class);
     }
 
     /**
@@ -34,5 +36,15 @@ class UserInviteRequest extends FormRequest
                 Rule::unique(User::class),
             ],
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function passedValidation(): void
+    {
+        $this->merge([
+            'email' => Str::lower($this->validated('email')),
+        ]);
     }
 }

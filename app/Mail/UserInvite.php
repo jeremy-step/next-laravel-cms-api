@@ -6,6 +6,7 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -26,7 +27,8 @@ class UserInvite extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'You have been invited to join '.config('app.name'),
+            subject: 'You have been invited to join '.config('general.website_name'),
+            from: new Address(config('mail.mailers.default.from.email'), config('mail.mailers.default.from.name') ?? config('general.website_name'))
         );
     }
 
@@ -39,7 +41,9 @@ class UserInvite extends Mailable
 
         return new Content(
             htmlString: <<<HTML
-            Invite link: $link
+            Invite link: <a href="$link" target="_blank">$link</a><br>
+            (Valid for 24 hours)
+            
             HTML,
         );
     }

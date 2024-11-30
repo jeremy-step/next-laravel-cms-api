@@ -14,8 +14,8 @@ use App\Models\User;
 use App\Models\UserInvite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
@@ -24,6 +24,7 @@ class UserController extends Controller
         'id',
         'username',
         'email',
+        'owner',
         'name_display',
         'name_first',
         'name_second',
@@ -41,20 +42,11 @@ class UserController extends Controller
      */
     public function invite(UserInviteRequest $request): null
     {
-        $email = $request->validated('email');
+        $data = $request->all(['email']);
 
-        $key = config('app.key');
+        UserInvite::updateOrCreate($data, [UserInvite::CREATED_AT => now()]);
 
-        if (str_starts_with($key, 'base64:')) {
-            $key = base64_decode(substr($key, 7));
-        }
-
-        UserInvite::updateOrCreate(
-            ['email' => Str::lower($email)],
-            [UserInvite::CREATED_AT => Carbon::now()]
-        );
-
-        Mail::to($email)->send(new MailUserInvite);
+        Mail::mailer('default')->to($data['email'])->send(new MailUserInvite);
 
         return null;
     }
@@ -130,11 +122,9 @@ class UserController extends Controller
     /**
      * Remove the specified user from storage.
      */
-    public function destroy(User $user, Request $request): array
+    public function destroy(User $user): array
     {
-        if ($request->user()?->id === $user->id) {
-            return ['message' => 'User could not be deleted'];
-        }
+        Gate::authorize('delete', $user);
 
         return $user->delete() ? ['message' => 'User deleted successfully'] : ['message' => 'User could not be deleted'];
     }
