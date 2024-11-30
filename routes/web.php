@@ -37,7 +37,7 @@ Route::name('front.')
 
                     });
 
-                Route::get('/settings')->name('settings.index');
+                Route::get('/settings')->middleware('front:owner')->name('settings.index');
 
             });
 
@@ -61,8 +61,9 @@ Route::name('front.')
 
 Route::middleware(FrontRoutesMiddleware::class)->group(function (): void {
 
-    Route::get('/{permalink?}')
-        ->where(['permalink' => '.+', 'include-pattern:permalink' => true])
+    Route::get('/{permalink}')
+        ->where(['permalink' => '.*', 'include-pattern:permalink' => true])
+        ->middleware('front:permalink:frontpage')
         ->name('front.page.permalink');
 
 });
