@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Page extends Model
 {
@@ -23,7 +24,20 @@ class Page extends Model
         'title',
         'text',
         'permalink',
+        'published',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'published' => 'boolean',
+        ];
+    }
 
     /**
      * Get the user that owns the page.
@@ -31,5 +45,13 @@ class Page extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the matadata belonging to the page.
+     */
+    public function metadata(): HasOne
+    {
+        return $this->hasOne(PageMetadata::class);
     }
 }

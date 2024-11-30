@@ -24,7 +24,19 @@ class StorePageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required'],
+            'title' => ['required', 'string', 'max:255'],
+            'text' => ['nullable', 'string'],
+            'published' => ['required', 'boolean'],
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function passedValidation(): void
+    {
+        $this->merge([
+            'text' => $this->validated('text') ?? '',
+        ]);
     }
 }

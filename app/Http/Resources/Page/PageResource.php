@@ -22,7 +22,15 @@ class PageResource extends JsonResource
             'title' => $this->title,
             'text' => $this->text,
             'meta' => [
+                'frontpage' => config('general.frontpage') === $this->id,
+                'published' => $this->published,
                 'permalink' => $this->permalink,
+                'title' => $this->metadata->title,
+                'description' => $this->metadata->description,
+                'robots' => $this->metadata->robots,
+                'sitemap_include' => $this->metadata->sitemap_include,
+                'sitemap_prio' => $this->metadata->sitemap_prio,
+                'sitemap_change_freq' => $this->metadata->sitemap_change_freq,
                 'timestamps' => [
                     'created_at' => $this->created_at,
                     'updated_at' => $this->updated_at,
