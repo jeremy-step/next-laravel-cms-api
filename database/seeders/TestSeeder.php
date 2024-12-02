@@ -15,6 +15,15 @@ class TestSeeder extends Seeder
      */
     public function run(): void
     {
+        User::create([
+            'username' => 'user',
+            'email' => 'user@example.dev',
+            'password' => 'user',
+            'name_display' => '<username>',
+            'phone' => '333 444 555',
+            'phone_prefix' => '34',
+        ]);
+
         $user = User::create([
             'username' => 'admin',
             'email' => 'admin@example.dev',
