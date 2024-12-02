@@ -13,7 +13,7 @@ class UserPolicy
      */
     public function invite(User $user): bool
     {
-        return $user->owner;
+        return (bool) $user->owner;
     }
 
     /**
