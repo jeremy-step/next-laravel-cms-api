@@ -12,5 +12,9 @@ To serve (development) the application:
     -   Run `php artisan key:generate`
     -   Run `composer run dev`
 -   Default hosts for frontend and api are `localhost:3000` and `localhost:8000` respectively
+-   For testing:
+    -   Duplicate the `.env.testing.example` file and rename it to `.env.testing`
+    -   Run `php artisan key:generate --env testing`
+    -   Run `php artisan test`
 
 To install the Frontend CMS repository, see the readme: https://github.com/cima-alfa/next-laravel-cms-front/blob/main/README.md
