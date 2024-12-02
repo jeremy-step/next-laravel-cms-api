@@ -40,7 +40,7 @@ class UserController extends Controller
     /**
      * Invite a new user to register.
      */
-    public function invite(UserInviteRequest $request): null
+    public function invite(UserInviteRequest $request): array
     {
         $data = $request->all(['email']);
 
@@ -48,7 +48,7 @@ class UserController extends Controller
 
         Mail::mailer('default')->to($data['email'])->send(new MailUserInvite);
 
-        return null;
+        return ['data' => null];
     }
 
     /**
@@ -70,9 +70,9 @@ class UserController extends Controller
     /**
      * Check if current user is authenticated.
      */
-    public function isAuthenticated(): null
+    public function isAuthenticated(): array
     {
-        return null;
+        return ['data' => null];
     }
 
     /**
