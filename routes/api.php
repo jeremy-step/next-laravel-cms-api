@@ -26,7 +26,7 @@ Route::name('api.')->group(function (): void {
                 });
 
                 Route::post('/invite', 'invite')->name('invite');
-                Route::patch('/{user}', 'update')->name('update');
+                // Route::patch('/{user}', 'update')->name('update');
                 Route::delete('/{user}', 'destroy')->name('destroy');
                 Route::get('/authenticated', 'getAuthenticated')->name('authenticated');
                 Route::get('/is-authenticated', 'isAuthenticated')->name('is-authenticated');
