@@ -32,7 +32,7 @@ class CreateNewUser implements CreatesNewUsers
         }
 
         if (! $this->request->hasValidSignature()) {
-            abort(401, 'You must be invited to register.');
+            abort(403, 'You must be invited to register.');
         }
     }
 
@@ -60,7 +60,7 @@ class CreateNewUser implements CreatesNewUsers
         $invite = UserInvite::whereEmail($email)->where(UserInvite::CREATED_AT, '>=', Carbon::now()->subMinutes(config('fortify.invite.lifetime')))->first();
 
         if (! $invite) {
-            abort(401, 'You must be invited to register.');
+            abort(403, 'You must be invited to register.');
         }
 
         $user = User::create([
