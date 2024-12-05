@@ -20,6 +20,9 @@ class ZiggyRoutes implements Stringable
         $ziggy = collect($this->ziggy->toArray());
         $ziggyRoutes = collect($ziggy['routes'] ?? []);
 
+        $ziggy['url'] = null;
+        $ziggy['port'] = null;
+
         $ziggy['routes'] = $ziggyRoutes->map(function ($route, $name) use ($routes): array {
             $middleware = array_filter(
                 $routes[$name]->middleware(),
