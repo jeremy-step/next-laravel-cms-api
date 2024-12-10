@@ -9,7 +9,7 @@ Schedule::command('model:prune')->daily();
 
 Artisan::command('ziggy:generate:api', function (): void {
     Artisan::call(
-        'ziggy:generate ../next-laravel-cms-front/src/lib/router/router-api.js --group api'
+        'ziggy:generate ../next-laravel-cms-front/src/lib/utils/router/router-api.js --group api'
     );
 
     $this->info('API Files generated!');
@@ -17,7 +17,7 @@ Artisan::command('ziggy:generate:api', function (): void {
 
 Artisan::command('ziggy:generate:front', function (): void {
     Artisan::call(
-        'ziggy:generate ../next-laravel-cms-front/src/lib/router/router-front.js --group front'
+        'ziggy:generate ../next-laravel-cms-front/src/lib/utils/router/router-front.js --group front'
     );
 
     $this->info('Front Files generated!');
