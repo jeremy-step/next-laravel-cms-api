@@ -10,7 +10,7 @@
     "require": {
         "php": "^8.2",
         "laravel/fortify": "^1.25",
-        "laravel/framework": "^11.34",
+        "laravel/framework": "^11.35",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10",
         "spatie/laravel-json-api-paginate": "^1.15",
