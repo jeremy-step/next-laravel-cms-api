@@ -1,3 +1,5 @@
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/cima-alfa/next-laravel-cms-api)
+
 To serve (development) the application:
 
 -   PHP 8.2 - 8.3 is required
