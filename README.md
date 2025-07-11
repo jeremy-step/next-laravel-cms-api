@@ -1,4 +1,6 @@
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/cima-alfa/next-laravel-cms-api)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/jeremy-step/next-laravel-cms-api)
+
+# Next.js with Laravel backend practice project (Laravel API)
 
 To serve (development) the application:
 
