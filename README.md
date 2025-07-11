@@ -7,7 +7,7 @@ To serve (development) the application:
 -   PHP 8.2 - 8.3 is required
 -   Node.js 22 is required
 -   The `nodemon` package is required (can be installed locally or globally)
--   For now, installing the Frontend CMS repository in the same directory is required - [Repo Here](https://github.com/cima-alfa/next-laravel-cms-front)
+-   For now, installing the Frontend CMS repository in the same directory is required - [Repo Here](https://github.com/jeremy-step/next-laravel-cms-front)
 -   Do the following:
     -   Run `composer install`
     -   Run `pnpm install`
