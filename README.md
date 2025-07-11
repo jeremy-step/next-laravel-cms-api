@@ -21,4 +21,4 @@ To serve (development) the application:
     -   Run `php artisan key:generate --env testing`
     -   Run `php artisan test`
 
-To install the Frontend CMS repository, see the readme: https://github.com/cima-alfa/next-laravel-cms-front/blob/main/README.md
+To install the Frontend CMS repository, see the readme: https://github.com/jeremy-step/next-laravel-cms-front/blob/main/README.md
